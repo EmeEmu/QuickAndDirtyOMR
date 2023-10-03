@@ -88,6 +88,26 @@
       contrastSlider.addEventListener("input", drawProceduralImage);
       angleSlider.addEventListener("input", drawProceduralImage);
 
+      // Add a click event listener to update the angle when the user left-clicks on the canvas
+      canvas.addEventListener("click", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        // Calculate the angle in radians based on the click position relative to the canvas center
+        const deltaX = clickX - centerX;
+        const deltaY = centerY - clickY; // Invert deltaY to account for canvas coordinate system
+        const newAngle = Math.atan2(deltaY, deltaX) + Math.PI;
+
+        // Convert the angle to degrees and update the angle and angleSlider
+        const newAngleDegrees = (newAngle * 180) / Math.PI;
+        angleSlider.value = newAngleDegrees;
+        drawProceduralImage();
+      });
+
       function drawProceduralImage() {
         const width = canvas.width;
         const height = canvas.height;
